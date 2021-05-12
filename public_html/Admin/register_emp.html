@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<form id="empAdd" enctype="multipart/form-data">
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <label class="col-md-6">
+                <p class="label-txt">Name</p>
+                <input type="text" id="name" name="name" class="input" required>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+
+            <label class="col-md-6">
+                <p class="label-txt">Contact Number</p>
+                <input type="tel" id="contact_number" name="contact_number" class="input" required>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+
+            <label class="col-md-6">
+                <p class="label-txt">Username</p>
+                <input type="text" id="username" name="username" class="input" required>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+
+            <label class="col-md-6">
+                <p class="label-txt">Password</p>
+                <input type="password" id="password" name="password" class="input" required>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+
+
+
+
+        </div>
+
+    </div>
+
+    <button type="submit">Register</button>
+    <br>
+    <br>
+
+
+</form>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.input').focus(function () {
+            $(this).parent().find(".label-txt").addClass('label-active');
+        });
+
+        $(".input").focusout(function () {
+            if ($(this).val() == '') {
+                $(this).parent().find(".label-txt").removeClass('label-active');
+            }
+            ;
+        });
+
+    });
+
+    $(document).ready(function (e) {
+        $("#empAdd").on('submit', (function (e) {
+
+            var login_token = localStorage.getItem('login-token');
+
+            e.preventDefault();
+            $.ajax({
+                url: "http://127.0.0.1:8000/api/v1/employee/register",
+                headers: {
+                    'app-token': '$*P?vm!QT?_sX=hv+jAsFgxmc2EFB!',
+                    'session-token': login_token
+                },
+                type: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (response)
+                {
+                    console.log(response);
+                    alert(response.message);
+
+                    register_emp();
+
+                },
+                error: function (data) {
+
+                    alert(data.responseJSON.message);
+                }
+            });
+        }));
+    }
+    );
+
+
+</script>
+
+
+

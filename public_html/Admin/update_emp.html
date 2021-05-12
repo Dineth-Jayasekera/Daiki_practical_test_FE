@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<div class="container">
+
+    <div class="col-lg-12 row">
+
+        <div class="col-md-8">
+            <div class="d-grid gap-2">
+                <input type="tel" class="form-control form-control-lg" id="empMobile" placeholder="Employee Mobile Number" max="10">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="d-grid gap-2">
+                <button class="btn btn-danger btn-lg" type="button" onclick="search_emap()">Search Employee</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<form id="empUpdate" enctype="multipart/form-data">
+
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <input type="hidden" id="id" name="id" class="input">
+
+            <label class="col-md-6">
+                <p class="label-txt">Name</p>
+                <input type="text" id="name" name="name" class="input" required>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+
+            <label class="col-md-6">
+                <p class="label-txt">Contact Number</p>
+                <input type="tel" id="contact_number" name="contact_number" class="input" required>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+
+            <label class="col-md-6">
+                <p class="label-txt">Username</p>
+                <input type="text" id="username" name="username" class="input" required>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+
+            <label class="col-md-6">
+                <p class="label-txt">Password</p>
+                <input type="password" id="password" name="password" class="input" required>
+                <div class="line-box">
+                    <div class="line"></div>
+                </div>
+            </label>
+
+
+
+
+        </div>
+
+    </div>
+
+    <button type="submit">Update Details</button>
+    <br>
+    <br>
+
+
+</form>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('.input').focus(function () {
+            $(this).parent().find(".label-txt").addClass('label-active');
+        });
+
+        $(".input").focusout(function () {
+            if ($(this).val() == '') {
+                $(this).parent().find(".label-txt").removeClass('label-active');
+            }
+            ;
+        });
+
+    });
+
+    $(document).ready(function (e) {
+        $("#empUpdate").on('submit', (function (e) {
+
+            var login_token = localStorage.getItem('login-token');
+            var id = $('#id').val();
+
+            e.preventDefault();
+            $.ajax({
+                url: "http://127.0.0.1:8000/api/v1/employee/update",
+                headers: {
+                    'app-token': '$*P?vm!QT?_sX=hv+jAsFgxmc2EFB!',
+                    'session-token': login_token
+                },
+                type: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (response)
+                {
+                    console.log(response);
+                    alert(response.message);
+
+                    update_emp();
+
+                },
+                error: function (data) {
+
+                    alert(data.responseJSON.message);
+                }
+            });
+        }));
+    }
+    );
+
+    function search_emap() {
+
+        var mobile = $('#empMobile').val();
+
+        var login_token = localStorage.getItem('login-token');
+
+        $.ajax({
+            url: "http://127.0.0.1:8000/api/v1/employee/search?mobile=" + mobile,
+            headers: {
+                'app-token': '$*P?vm!QT?_sX=hv+jAsFgxmc2EFB!',
+                'session-token': login_token
+            },
+            data: {
+
+            },
+            type: "GET",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (response)
+            {
+
+                $('#id').val(response.data.id);
+                $('#name').val(response.data.name);
+                $('#contact_number').val(response.data.contact_number);
+                $('#username').val(response.data.username);
+                $('#password').val(response.data.password);
+
+            },
+            error: function (data) {
+
+                alert(data.responseJSON.message);
+            }
+        });
+
+    }
+
+</script>
+
+
+
